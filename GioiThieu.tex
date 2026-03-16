@@ -1,69 +1,46 @@
-\documentclass[10pt, aspectratio=169]{beamer}
-
-% --- Cấu hình giao diện (Theme) ---
-\usetheme{metropolis} % Theme hiện đại, sạch sẽ
-\usecolortheme{spruce} % Tông màu xanh lá đậm chuyên nghiệp
-
-% --- Gói hỗ trợ tiếng Việt và đồ họa ---
+\documentclass{beamer}
 \usepackage[utf8]{inputenc}
-\usepackage[vietnam]{babel}
-\usepackage{tikz} % Thư viện vẽ đồ thị mạnh mẽ nhất trong LaTeX
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.18}
+\usepackage[vietnamese]{babel}
+\usepackage{graphicx}
+\usepackage{tikz}
 
-% --- Thông tin bài thuyết trình ---
-\title{\huge \textbf{NGÔN NGỮ CỦA NHỮNG CON SỐ}}
-\subtitle{Biến dữ liệu khô khan thành câu chuyện đầy cảm hứng}
-\author{Trình bày bởi: [Tên của bạn]}
-\date{Tháng 3, 2026}
+%--- Style riêng ---
+\usetheme{Madrid}
+\usecolortheme{seahorse} % xanh nhẹ
+\usefonttheme{professionalfonts}
+\setbeamertemplate{navigation symbols}{}
 
 \begin{document}
 
-% --- Trang tiêu đề với ĐIỂM NHẤN ĐỒ THỊ ---
+%--- Trang bìa ---
 \begin{frame}[plain]
-    \begin{columns}
-        % Cột trái: Tiêu đề
-        \begin{column}{0.5\textwidth}
-            \titlepage
-        \end{column}
-        
-        % Cột phải: Điểm nhấn là một đồ thị hàm số đang tăng trưởng
-        \begin{column}{0.5\textwidth}
-            \begin{center}
-                \begin{tikzpicture}[scale=0.8]
-                    \begin{axis}[
-                        axis lines = left,
-                        xlabel = {$t$},
-                        ylabel = {$V$},
-                        ytick = \empty,
-                        xtick = \empty,
-                        enlarge x limits=0.1,
-                        enlarge y limits=0.1,
-                        line width=1.5pt,
-                        every axis/.append style={font=\tiny}
-                    ]
-                        % Vẽ đường biểu diễn sự tăng trưởng (điểm nhấn)
-                        \addplot [
-                            domain=0:10, 
-                            samples=100, 
-                            color=orange,
-                            line width=2pt,
-                            % Hiệu ứng đổ bóng cho đường đồ thị
-                            postaction={decorate,decoration={raise=-2pt,draw}}
-                        ] {exp(x/3)};
-                        
-                        \addlegendentry{Sự bùng nổ}
-                    \end{axis}
-                \end{tikzpicture}
-                
-                \vspace{0.5cm}
-                \setbeamercolor{block title}{bg=orange, fg=white}
-                \begin{beamercolorbox}[sep=0.1em,wd=4cm,center,rounded=true,shadow=true]{block title}
-                    \small \textbf{DATA INSIGHT 2026}
-                \end{beamercolorbox}
-            \end{center}
-        \end{column}
-    \end{columns}
+  \centering
+  \renewcommand{\baselinestretch}{1.1}\selectfont
+  \vspace*{2cm}
+  {\color{blue!80!black}\Huge\textbf{Giới thiệu Lý thuyết Đồ thị}}\\[0.5em]
+  {\Large\textbf{Lê Văn Hoàng An}}\\[0.5em]
+  {\today}
 \end{frame}
 
-\end{document}
+%--- Slide 2: Giới thiệu ---
+\begin{frame}{Giới thiệu}
+  \begin{columns}[T]
+    \begin{column}{0.6\textwidth}
+      \begin{itemize}
+        \item Lý thuyết đồ thị là một nhánh của toán học rời rạc.
+        \item Nghiên cứu các đối tượng (đỉnh) và mối quan hệ (cạnh).
+        \item Ứng dụng rộng rãi trong:
+          \begin{itemize}
+            \item Khoa học máy tính (mạng, thuật toán).
+            \item Giao thông (đường đi ngắn nhất).
+            \item Mạng xã hội (phân tích kết nối).
+          \end{itemize}
+        \item Đặt nền tảng cho nhiều thuật toán quan trọng.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.4\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{Gemini_Generated_Image_dv0x2bdv0x2bdv0x.png}
+    \end{column}
+  \end{columns}
+\end{frame}
