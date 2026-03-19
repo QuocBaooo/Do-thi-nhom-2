@@ -28,7 +28,6 @@ Repository này được tạo để lưu trữ **slide thuyết trình, lý thu
 - Đường đi trong đồ thị
 - Thuật toán đường đi ngắn nhất
   - Dijkstra
-  - Bellman-Ford
   - Floyd-Warshall
 - Đồ thị đặc biệt
 - Bài tập và Test
