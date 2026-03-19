@@ -1,0 +1,284 @@
+\documentclass{beamer}
+
+\usetheme{Madrid}
+
+% tiếng Việt
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{xcolor}
+
+% ===== Bảng màu pastel =====
+\definecolor{pastelblue}{RGB}{200,230,255}
+\definecolor{softblue}{RGB}{150,200,235}
+\definecolor{deepblue}{RGB}{60,120,170}
+
+\definecolor{pastelgreen}{RGB}{200,245,220}
+\definecolor{pastelpink}{RGB}{255,210,220}
+\definecolor{pastelyellow}{RGB}{255,245,200}
+\definecolor{pastelpurple}{RGB}{220,210,255}
+\definecolor{pastelorange}{RGB}{255,220,180}
+
+% ===== Style tổng thể =====
+\setbeamercolor{structure}{fg=deepblue}
+
+\setbeamercolor{frametitle}{
+    bg=pastelblue,
+    fg=black
+}
+
+\setbeamercolor{title}{
+    bg=softblue,
+    fg=black
+}
+
+\setbeamercolor{block title}{
+    bg=pastelpurple,
+    fg=black
+}
+
+\setbeamercolor{block body}{
+    bg=pastelblue!30,
+    fg=black
+}
+
+\setbeamercolor{itemize item}{fg=deepblue}
+\setbeamercolor{itemize subitem}{fg=softblue}
+
+\title{Biểu diễn đồ thị}
+\author{Nhóm 2}
+\date{\today}
+
+\begin{document}
+
+%--------------------------------
+\frame{\titlepage}
+
+%--------------------------------
+\begin{frame}{Định nghĩa}
+
+Biểu diễn đồ thị là cách lưu trữ đồ thị $G = (V,E)$.
+
+\begin{itemize}
+\item $V$: tập đỉnh
+\item $E$: tập cạnh
+\end{itemize}
+
+\textbf{Mục tiêu:}
+\begin{itemize}
+\item Tiết kiệm bộ nhớ
+\item Duyệt nhanh
+\item Phù hợp thuật toán
+\end{itemize}
+
+\end{frame}
+
+%--------------------------------
+\begin{frame}{Đồ thị ví dụ chung}
+
+\begin{columns}
+
+\column{0.5\textwidth}
+
+\begin{tikzpicture}[scale=0.9]
+
+\node[circle,draw,fill=pastelblue] (1) at (0,0) {1};
+\node[circle,draw,fill=pastelgreen] (2) at (2,1) {2};
+\node[circle,draw,fill=pastelpink] (3) at (2,-1) {3};
+\node[circle,draw,fill=pastelyellow] (4) at (4,0) {4};
+
+\draw[thick, color=deepblue] (1)--(2);
+\draw[thick, color=deepblue] (1)--(3);
+\draw[thick, color=deepblue] (2)--(4);
+\draw[thick, color=deepblue] (3)--(4);
+
+\end{tikzpicture}
+
+\column{0.5\textwidth}
+
+\[
+V=\{1,2,3,4\}
+\]
+\[
+E=\{(1,2),(1,3),(2,4),(3,4)\}
+\]
+
+\end{columns}
+
+\end{frame}
+
+%--------------------------------
+\section{Edge List}
+
+\setbeamercolor{frametitle}{bg=pastelpink}
+
+\begin{frame}{Danh sách cạnh (Edge List)}
+
+\textbf{Biểu diễn:}
+
+\[
+(1,2), (1,3), (2,4)
+\]
+
+\textbf{Code:}
+{\scriptsize
+\begin{verbatim}
+vector<pair<int,int>> edges;
+
+edges.push\_back({1,2});
+edges.push\_back({1,3});
+edges.push\_back({2,4});
+\end{verbatim}
+}
+
+\textbf{Đặc điểm:}
+\begin{itemize}
+\item Dễ lưu, dễ nhập
+\item Không tối ưu khi duyệt
+\end{itemize}
+
+\end{frame}
+
+%--------------------------------
+\section{Adjacency Matrix}
+
+\setbeamercolor{frametitle}{bg=pastelgreen}
+
+\begin{frame}{Ma trận kề}
+
+\begin{columns}
+
+\column{0.5\textwidth}
+
+\[
+\begin{bmatrix}
+0 & 1 & 1 & 0 \\
+1 & 0 & 0 & 1 \\
+1 & 0 & 0 & 1 \\
+0 & 1 & 1 & 0
+\end{bmatrix}
+\]
+
+\column{0.5\textwidth}
+
+\textbf{Code:}
+\begin{verbatim}
+
+a[1][2] = a[2][1] = 1;
+a[1][3] = a[3][1] = 1;
+a[2][4] = a[4][2] = 1;
+a[3][4] = a[4][3] = 1;
+\end{verbatim}
+
+\end{columns}
+
+\textbf{Đặc điểm:}
+\begin{itemize}
+\item Kiểm tra cạnh nhanh O(1)
+\item Tốn bộ nhớ O($n^2$)
+\end{itemize}
+
+\end{frame}
+
+%--------------------------------
+\section{Adjacency List}
+
+\setbeamercolor{frametitle}{bg=pastelpurple}
+
+\begin{frame}{Danh sách kề}
+
+\begin{columns}
+
+\column{0.5\textwidth}
+
+\begin{itemize}
+\item 1: 2, 3
+\item 2: 1, 4
+\item 3: 1, 4
+\item 4: 2, 3
+\end{itemize}
+
+\column{0.5\textwidth}
+
+\textbf{Code:}
+\begin{verbatim}
+vector<int> adj[100];
+
+adj[1] = {2,3};
+adj[2] = {1,4};
+adj[3] = {1,4};
+adj[4] = {2,3};
+\end{verbatim}
+
+\end{columns}
+
+\textbf{Đặc điểm:}
+\begin{itemize}
+\item Tiết kiệm bộ nhớ
+\item Duyệt nhanh
+\end{itemize}
+
+\end{frame}
+
+%--------------------------------
+\section{So sánh}
+
+\setbeamercolor{frametitle}{bg=pastelyellow}
+
+\begin{frame}{So sánh 3 cách}
+
+\begin{itemize}
+\item \textbf{Edge List:}
+\begin{itemize}
+\item Lưu đơn giản
+\item Không phù hợp BFS/DFS
+\end{itemize}
+
+\item \textbf{Adjacency Matrix:}
+\begin{itemize}
+\item Kiểm tra cạnh nhanh nhất
+\item Chậm khi duyệt toàn bộ
+\end{itemize}
+
+\item \textbf{Adjacency List:}
+\begin{itemize}
+\item Duyệt nhanh nhất
+\item Dùng phổ biến nhất
+\end{itemize}
+
+\end{itemize}
+
+\end{frame}
+
+%--------------------------------
+\section{Khi nào dùng}
+
+\setbeamercolor{frametitle}{bg=pastelorange}
+
+\begin{frame}{Khi nào nên dùng?}
+
+\textbf{Edge List:}
+\begin{itemize}
+\item Khi chỉ cần lưu cạnh
+\item Bài toán đơn giản
+\end{itemize}
+
+\textbf{Adjacency Matrix:}
+\begin{itemize}
+\item Đồ thị dày ($m \approx n^2$)
+\item Cần kiểm tra nhanh có cạnh hay không
+\end{itemize}
+
+\textbf{Adjacency List:}
+\begin{itemize}
+\item Đồ thị thưa
+\item Dùng BFS, DFS
+\item Thi lập trình
+\end{itemize}
+
+\end{frame}
+
+\end{document}
