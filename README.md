@@ -29,8 +29,6 @@ Repository này được tạo để lưu trữ **slide thuyết trình, lý thu
 - Thuật toán đường đi ngắn nhất
   - Dijkstra
   - Floyd-Warshall
-- Đồ thị đặc biệt
-- Bài tập và Test
 ---
 
 # 👥 Thành viên
