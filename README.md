@@ -24,6 +24,7 @@ Repository này được tạo để lưu trữ **slide thuyết trình, lý thu
 - Duyệt đồ thị
   - BFS
   - DFS
+- Đồ thị liên thông
 - Đường đi trong đồ thị
 - Thuật toán đường đi ngắn nhất
   - Dijkstra
@@ -34,9 +35,9 @@ Repository này được tạo để lưu trữ **slide thuyết trình, lý thu
 
 | STT | Họ và Tên | Vai trò | Nhiệm vụ cụ thể | Trạng thái |
 | :--: | :--- | :--- | :--- | :---: |
-| 1 | **Trần Quốc Bảo** | Trưởng nhóm | Điều phối, kiểm duyệt nội dung và thuyết trình | ⏳ *In Progress* |
-| 2 | **Lê Văn Hoàng An** | Nội dung | Tìm kiếm tài liệu, soạn thảo văn bản dự án | ✅ *Completed* |
-| 3 | **Phạm Gia Kiệt** | Kỹ thuật | Phát triển thuật toán, tối ưu code và làm Slide/Beamer | ⏳ *In Progress* |
+| 1 | **Trần Quốc Bảo** | Trưởng nhóm | Phân công nhiệm vụ, làm phần giới thiệu, các khái niệm cơ bản và biểu diễn đồ thị | ✅ |
+| 2 | **Lê Văn Hoàng An** | Thành viên | Làm phần duyệt đồ thị (DFS, BFS), đồ thị liên thông | ✅ |
+| 3 | **Phạm Gia Kiệt** | Thành viên | Làm phần đường đi trong đồ thị, đường đi ngắn nhất | ✅ |
 
 ---
 
