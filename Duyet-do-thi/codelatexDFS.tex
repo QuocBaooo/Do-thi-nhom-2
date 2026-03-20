@@ -1,0 +1,289 @@
+\documentclass{beamer}
+
+\usetheme{Madrid}
+
+%================= FONT & LANGUAGE =================
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+
+%================= PACKAGE =================
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{fontawesome5}
+
+%================= COLOR =================
+\definecolor{main1}{RGB}{102,126,234}
+\definecolor{main2}{RGB}{118,75,162}
+\definecolor{boxbg}{RGB}{255,255,255}
+
+\setbeamercolor{frametitle}{fg=white,bg=main1}
+\setbeamercolor{title}{fg=white,bg=main2}
+
+%================= BACKGROUND =================
+\setbeamertemplate{background canvas}{
+\begin{tikzpicture}[remember picture,overlay]
+\path[left color=main1!20,right color=main2!20]
+(current page.south west) rectangle (current page.north east);
+\end{tikzpicture}
+}
+
+%================= BOX =================
+\tcbset{
+  colback=boxbg,
+  colframe=main1,
+  arc=3mm,
+  boxrule=0.8pt
+}
+
+%================= CODE =================
+\lstset{
+  language=C++,
+  basicstyle=\ttfamily\tiny,
+  keywordstyle=\color{main2},
+  commentstyle=\color{green!50!black},
+  breaklines=true
+}
+
+%================= INFO =================
+\title{Thuật toán DFS (Depth-First Search)}
+\author{Lê Văn Hoàng An}
+\date{\today}
+
+\begin{document}
+
+\frame{\titlepage}
+
+%================= INTRO =================
+\section{Giới thiệu}
+
+\begin{frame}{DFS là gì?}
+\begin{tcolorbox}
+\begin{itemize}
+\item \faSearch DFS = Depth-First Search (Duyệt theo chiều sâu)
+\item \faArrowDown Đi sâu nhất có thể trước khi quay lui
+\item \faRedo Backtracking khi không còn đường đi
+\item \faCogs Sử dụng đệ quy hoặc stack
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.2cm}
+\begin{tcolorbox}
+\textbf{Ý nghĩa:}
+\begin{itemize}
+\item Giống khám phá mê cung
+\item Đi một hướng đến cùng rồi quay lại
+\end{itemize}
+\end{tcolorbox}
+\end{frame}
+
+%================= GRAPH =================
+\section{Minh họa}
+
+\begin{frame}{Minh họa DFS}
+\begin{columns}
+
+\column{0.5\textwidth}
+\begin{tikzpicture}[scale=1.1, every node/.style={circle, draw}]
+\node (A) at (0,0) {A};
+\node (B) at (2,1) {B};
+\node (C) at (2,-1) {C};
+\node (D) at (4,1) {D};
+\node (E) at (4,-1) {E};
+
+\draw (A)--(B);
+\draw (A)--(C);
+\draw (B)--(D);
+\draw (C)--(E);
+\end{tikzpicture}
+
+\column{0.5\textwidth}
+\begin{tcolorbox}
+\begin{itemize}
+\item \faPlay Bắt đầu từ A
+\item \faArrowRight Đi sâu: A → B → D
+\item \faUndo Quay lui → A → C → E
+\end{itemize}
+\end{tcolorbox}
+
+\end{columns}
+\end{frame}
+
+%================= THEORY =================
+\section{Lý thuyết}
+
+\begin{frame}{Ý tưởng + Giả mã DFS}
+\begin{tcolorbox}
+\begin{itemize}
+\item \faBullseye Mục tiêu: duyệt sâu theo nhánh
+\item \faLayerGroup Cấu trúc: stack / đệ quy
+\item \faCheckCircle Mỗi đỉnh chỉ thăm 1 lần
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.2cm}
+
+\begin{tcolorbox}
+\textbf{Quy trình:}
+\begin{enumerate}
+\item Đánh dấu đỉnh hiện tại
+\item Xử lý đỉnh
+\item Duyệt các đỉnh kề chưa thăm
+\item Gọi DFS đệ quy
+\end{enumerate}
+\end{tcolorbox}
+
+\vspace{0.2cm}
+
+\begin{tcolorbox}
+\textbf{Độ phức tạp:}
+\[
+O(V + E)
+\]
+\end{tcolorbox}
+\end{frame}
+
+%================= CODE =================
+\section{Cài đặt}
+
+\begin{frame}[fragile]{Code DFS (C++)}
+\begin{tcolorbox}
+\begin{lstlisting}
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<vector<int>> adj;
+vector<bool> visited;
+
+void dfs(int u) {
+    visited[u] = true;
+
+    // Xu ly dinh u
+    cout << u << " ";
+
+    for (int v : adj[u]) {
+        if (!visited[v]) {
+            dfs(v);
+        }
+    }
+}
+
+/*
+Phan tich:
+- Thoi gian: O(V + E)
+- Moi dinh duyet 1 lan
+- Su dung de quy don gian
+*/
+\end{lstlisting}
+\end{tcolorbox}
+\end{frame}
+
+%================= EXAMPLE =================
+\section{Ví dụ}
+
+\begin{frame}{Ví dụ minh họa DFS}
+\begin{columns}
+
+\column{0.5\textwidth}
+\begin{tikzpicture}[scale=1.1, every node/.style={circle, draw}]
+\node (1) at (0,0) {1};
+\node (2) at (2,1) {2};
+\node (3) at (2,-1) {3};
+\node (4) at (4,1) {4};
+\node (5) at (4,-1) {5};
+
+\draw (1)--(2);
+\draw (1)--(3);
+\draw (2)--(4);
+\draw (3)--(5);
+\end{tikzpicture}
+
+\column{0.5\textwidth}
+\begin{tcolorbox}
+\begin{itemize}
+\item \faRoute Thứ tự:
+\[
+1 \rightarrow 2 \rightarrow 4 \rightarrow 3 \rightarrow 5
+\]
+\item \faExchangeAlt Có backtracking
+\item \faProjectDiagram Không theo lớp như BFS
+\end{itemize}
+\end{tcolorbox}
+
+\end{columns}
+\end{frame}
+
+%================= ANIMATION =================
+\section{Animation DFS}
+
+\begin{frame}{Minh họa DFS từng bước}
+\centering
+
+\begin{tikzpicture}[
+    scale=1.2,
+    every node/.style={circle, draw, minimum size=8mm},
+    visited/.style={fill=green!40},
+    current/.style={fill=yellow!60}
+]
+
+\node (1) at (0,0) {1};
+\node (2) at (2,1) {2};
+\node (3) at (2,-1) {3};
+\node (4) at (4,1) {4};
+\node (5) at (4,-1) {5};
+
+\draw (1)--(2);
+\draw (1)--(3);
+\draw (2)--(4);
+\draw (3)--(5);
+
+\only<1>{\node[current] at (1) {1};}
+\only<2>{\node[visited] at (1) {1}; \node[current] at (2) {2};}
+\only<3>{\node[visited] at (1) {1}; \node[visited] at (2) {2}; \node[current] at (4) {4};}
+\only<4>{\node[visited] at (1) {1}; \node[visited] at (2) {2}; \node[visited] at (4) {4}; \node[current] at (3) {3};}
+\only<5>{\node[visited] at (1) {1}; \node[visited] at (2) {2}; \node[visited] at (4) {4}; \node[visited] at (3) {3}; \node[current] at (5) {5};}
+
+\end{tikzpicture}
+
+\vspace{0.5cm}
+\only<1>{Bắt đầu từ 1}
+\only<2>{Đi sâu đến 2}
+\only<3>{Tiếp tục đến 4}
+\only<4>{Quay lui → sang 3}
+\only<5>{Hoàn tất DFS}
+
+\end{frame}
+
+%================= APPLICATION =================
+\section{Ứng dụng}
+
+\begin{frame}{Ứng dụng của DFS}
+\begin{tcolorbox}
+\begin{itemize}
+\item \faProjectDiagram Tìm thành phần liên thông
+\item \faSync Kiểm tra chu trình
+\item \faSort Topological Sort
+\item \faBrain Backtracking, AI, game
+\end{itemize}
+\end{tcolorbox}
+\end{frame}
+
+%================= END =================
+\begin{frame}{Kết luận}
+\begin{tcolorbox}
+\begin{itemize}
+\item DFS là thuật toán nền tảng
+\item Độ phức tạp tối ưu $O(V+E)$
+\item Quan trọng trong nhiều bài toán nâng cao
+\end{itemize}
+\end{tcolorbox}
+
+\centering
+\vspace{0.5cm}
+\Huge{\textbf{Cảm ơn!}}
+\end{frame}
+
+\end{document}
