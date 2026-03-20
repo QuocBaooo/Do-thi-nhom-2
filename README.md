@@ -1,7 +1,7 @@
 # 📊 Do-thii
 ## Dự án Lý thuyết đồ thị (Graph Theory)
 
-Repository này được tạo để lưu trữ **slide thuyết trình, lý thuyết và bài tập về Lý thuyết đồ thị**.
+Repository này được tạo để lưu trữ **slide thuyết trình, lý thuyết về Lý thuyết đồ thị**.
 
 ---
 
@@ -9,7 +9,6 @@ Repository này được tạo để lưu trữ **slide thuyết trình, lý thu
 
 - Tạo các **slide thuyết trình về lý thuyết đồ thị**
 - Lưu trữ **tài liệu lý thuyết**
-- Bổ sung **bài tập và bài kiểm tra**
 - Hỗ trợ các thành viên trong nhóm **học tập và thuyết trình**
 
 ---
