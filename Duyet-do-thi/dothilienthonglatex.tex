@@ -1,0 +1,226 @@
+\documentclass{beamer}
+
+\usetheme{Madrid}
+
+%================= LANGUAGE =================
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+
+%================= PACKAGE =================
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{fontawesome5}
+
+%================= COLOR =================
+\definecolor{main1}{RGB}{102,126,234}
+\definecolor{main2}{RGB}{118,75,162}
+
+\setbeamercolor{frametitle}{fg=white,bg=main1}
+\setbeamercolor{title}{fg=white,bg=main2}
+
+%================= BACKGROUND =================
+\setbeamertemplate{background canvas}{
+\begin{tikzpicture}[remember picture,overlay]
+\path[left color=main1!20,right color=main2!20]
+(current page.south west) rectangle (current page.north east);
+\end{tikzpicture}
+}
+
+%================= BOX =================
+\tcbset{
+  colback=white,
+  colframe=main1,
+  arc=3mm,
+  boxrule=0.8pt
+}
+
+%================= CODE =================
+\lstset{
+  language=C++,
+  basicstyle=\ttfamily\tiny,
+  keywordstyle=\color{main2},
+  commentstyle=\color{green!50!black},
+  breaklines=true
+}
+
+%================= INFO =================
+\title{BFS và Đồ thị liên thông}
+\author{Lê Văn Hoàng An}
+\date{\today}
+
+\begin{document}
+
+\frame{\titlepage}
+
+%================= THEORY =================
+\section{Lý thuyết}
+
+\begin{frame}{BFS và Đồ thị liên thông}
+\begin{tcolorbox}
+\textbf{\faProjectDiagram Khái niệm đồ thị liên thông}
+\begin{itemize}
+\item \faCircle Đồ thị liên thông: tồn tại đường đi giữa mọi cặp đỉnh
+\item \faTimesCircle Nếu không → chia thành nhiều thành phần
+\item \faSitemap Mỗi thành phần là một nhóm liên thông riêng biệt
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.2cm}
+
+\begin{tcolorbox}
+\textbf{\faSearch Kiểm tra liên thông}
+\begin{itemize}
+\item \faPlay Chọn một đỉnh bất kỳ
+\item \faRoute Duyệt bằng BFS hoặc DFS
+\item \faCheckCircle Thăm hết → liên thông
+\item \faExclamationTriangle Còn đỉnh chưa thăm → không liên thông
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.2cm}
+
+\begin{tcolorbox}
+\textbf{\faLayerGroup Liên hệ BFS}
+\begin{itemize}
+\item \faStream BFS duyệt theo từng lớp (level)
+\item \faBolt Phù hợp tìm đường đi ngắn nhất
+\item \faClock Độ phức tạp: $O(V + E)$
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.2cm}
+
+\begin{tcolorbox}
+\textbf{\faCogs Đếm thành phần liên thông}
+\begin{itemize}
+\item \faSearch Duyệt toàn bộ các đỉnh
+\item \faPlusCircle Mỗi lần DFS/BFS → 1 thành phần
+\item \faSortNumericUp Kết quả = số thành phần
+\end{itemize}
+\end{tcolorbox}
+\end{frame}
+
+%================= VISUAL =================
+\section{Minh họa}
+
+\begin{frame}{Ví dụ đồ thị không liên thông}
+\begin{columns}
+
+\column{0.5\textwidth}
+\begin{tikzpicture}[scale=1.1, every node/.style={circle, draw}]
+\node (1) at (0,0) {1};
+\node (2) at (2,1) {2};
+\node (3) at (2,-1) {3};
+\node (4) at (4,1) {4};
+\node (5) at (4,-1) {5};
+
+\draw (1)--(2);
+\draw (2)--(3);
+\draw (4)--(5);
+\end{tikzpicture}
+
+\column{0.5\textwidth}
+\begin{tcolorbox}
+\begin{itemize}
+\item \faUsers Thành phần 1: 1, 2, 3
+\item \faUsers Thành phần 2: 4, 5
+\item \faTimes Không có cạnh nối
+\item \faExclamationTriangle → Không liên thông
+\end{itemize}
+\end{tcolorbox}
+
+\end{columns}
+\end{frame}
+
+%================= CODE =================
+\section{Cài đặt}
+
+\begin{frame}[fragile]{Code BFS}
+\begin{tcolorbox}
+\begin{lstlisting}
+void bfs(int start, vector<vector<int>>& adj) {
+    vector<bool> visited(adj.size(), false);
+    queue<int> q;
+
+    visited[start] = true;
+    q.push(start);
+
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+
+        for (int v : adj[u]) {
+            if (!visited[v]) {
+                visited[v] = true;
+                q.push(v);
+            }
+        }
+    }
+}
+\end{lstlisting}
+\end{tcolorbox}
+\end{frame}
+
+\begin{frame}[fragile]{Code DFS kiểm tra liên thông}
+\begin{tcolorbox}
+\begin{lstlisting}
+vector<vector<int>> adj;
+vector<bool> da_tham;
+
+void dfs_lt(int u) {
+    da_tham[u] = true;
+    for (int v : adj[u]) {
+        if (!da_tham[v]) dfs_lt(v);
+    }
+}
+
+bool kt_lt(int n) {
+    da_tham.assign(n, false);
+    dfs_lt(0);
+
+    for (int i = 0; i < n; i++) {
+        if (!da_tham[i]) return false;
+    }
+    return true;
+}
+\end{lstlisting}
+\end{tcolorbox}
+\end{frame}
+
+\begin{frame}[fragile]{Đếm thành phần liên thông}
+\begin{tcolorbox}
+\begin{lstlisting}
+int dem_tplt(int n) {
+    da_tham.assign(n, false);
+    int dem = 0;
+
+    for (int i = 0; i < n; i++) {
+        if (!da_tham[i]) {
+            dfs_lt(i);
+            dem++;
+        }
+    }
+    return dem;
+}
+\end{lstlisting}
+\end{tcolorbox}
+\end{frame}
+
+%================= END =================
+\begin{frame}{Kết luận}
+\begin{tcolorbox}
+\begin{itemize}
+\item \faStream BFS: duyệt theo lớp
+\item \faProjectDiagram DFS: kiểm tra liên thông
+\item \faRocket Ứng dụng rộng trong thực tế
+\end{itemize}
+\end{tcolorbox}
+
+\centering
+\Huge{\textbf{Cảm ơn!}}
+\end{frame}
+
+\end{document}
