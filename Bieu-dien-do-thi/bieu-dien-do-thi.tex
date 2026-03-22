@@ -2,77 +2,75 @@
 
 \usetheme{Madrid}
 
-% tiếng Việt
+%================= LANGUAGE =================
 \usepackage[utf8]{inputenc}
 \usepackage[T5]{fontenc}
 \usepackage[vietnamese]{babel}
 
+%================= PACKAGE =================
 \usepackage{amsmath}
 \usepackage{tikz}
 \usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{fontawesome5}
 
-% ===== Bảng màu pastel =====
-\definecolor{pastelblue}{RGB}{200,230,255}
-\definecolor{softblue}{RGB}{150,200,235}
-\definecolor{deepblue}{RGB}{60,120,170}
+%================= COLOR =================
+\definecolor{main1}{RGB}{102,126,234}
+\definecolor{main2}{RGB}{118,75,162}
 
-\definecolor{pastelgreen}{RGB}{200,245,220}
-\definecolor{pastelpink}{RGB}{255,210,220}
-\definecolor{pastelyellow}{RGB}{255,245,200}
-\definecolor{pastelpurple}{RGB}{220,210,255}
-\definecolor{pastelorange}{RGB}{255,220,180}
+\setbeamercolor{frametitle}{fg=white,bg=main1}
+\setbeamercolor{title}{fg=white,bg=main2}
 
-% ===== Style tổng thể =====
-\setbeamercolor{structure}{fg=deepblue}
-
-\setbeamercolor{frametitle}{
-    bg=pastelblue,
-    fg=black
+%================= BACKGROUND =================
+\setbeamertemplate{background canvas}{
+\begin{tikzpicture}[remember picture,overlay]
+\path[left color=main1!20,right color=main2!20]
+(current page.south west) rectangle (current page.north east);
+\end{tikzpicture}
 }
 
-\setbeamercolor{title}{
-    bg=softblue,
-    fg=black
+%================= BOX =================
+\tcbset{
+  colback=white,
+  colframe=main1,
+  arc=4mm,
+  boxrule=1pt,
+  drop shadow
 }
 
-\setbeamercolor{block title}{
-    bg=pastelpurple,
-    fg=black
-}
-
-\setbeamercolor{block body}{
-    bg=pastelblue!30,
-    fg=black
-}
-
-\setbeamercolor{itemize item}{fg=deepblue}
-\setbeamercolor{itemize subitem}{fg=softblue}
-
+%================= INFO =================
 \title{Biểu diễn đồ thị}
 \author{Nhóm 2}
 \date{\today}
 
 \begin{document}
 
-%--------------------------------
 \frame{\titlepage}
 
 %--------------------------------
 \begin{frame}{Định nghĩa}
 
+\begin{tcolorbox}
+\textbf{\faProjectDiagram Biểu diễn đồ thị}
+
 Biểu diễn đồ thị là cách lưu trữ đồ thị $G = (V,E)$.
 
 \begin{itemize}
-\item $V$: tập đỉnh
-\item $E$: tập cạnh
+\item[\faCircle] $V$: tập đỉnh
+\item[\faLink] $E$: tập cạnh
 \end{itemize}
+\end{tcolorbox}
 
-\textbf{Mục tiêu:}
+\vspace{0.2cm}
+
+\begin{tcolorbox}
+\textbf{\faBullseye Mục tiêu}
 \begin{itemize}
-\item Tiết kiệm bộ nhớ
-\item Duyệt nhanh
-\item Phù hợp thuật toán
+\item[\faCheckCircle] Tiết kiệm bộ nhớ
+\item[\faBolt] Duyệt nhanh
+\item[\faCogs] Phù hợp thuật toán
 \end{itemize}
+\end{tcolorbox}
 
 \end{frame}
 
@@ -84,75 +82,96 @@ Biểu diễn đồ thị là cách lưu trữ đồ thị $G = (V,E)$.
 \column{0.5\textwidth}
 
 \begin{tikzpicture}[scale=0.9]
+\node[circle,draw,fill=main1!20,thick] (1) at (0,0) {1};
+\node[circle,draw,fill=main2!20,thick] (2) at (2,1) {2};
+\node[circle,draw,fill=main2!20,thick] (3) at (2,-1) {3};
+\node[circle,draw,fill=main1!20,thick] (4) at (4,0) {4};
 
-\node[circle,draw,fill=pastelblue] (1) at (0,0) {1};
-\node[circle,draw,fill=pastelgreen] (2) at (2,1) {2};
-\node[circle,draw,fill=pastelpink] (3) at (2,-1) {3};
-\node[circle,draw,fill=pastelyellow] (4) at (4,0) {4};
-
-\draw[thick, color=deepblue] (1)--(2);
-\draw[thick, color=deepblue] (1)--(3);
-\draw[thick, color=deepblue] (2)--(4);
-\draw[thick, color=deepblue] (3)--(4);
-
+\draw[thick] (1)--(2);
+\draw[thick] (1)--(3);
+\draw[thick] (2)--(4);
+\draw[thick] (3)--(4);
 \end{tikzpicture}
 
 \column{0.5\textwidth}
 
+\begin{tcolorbox}
 \[
 V=\{1,2,3,4\}
 \]
 \[
 E=\{(1,2),(1,3),(2,4),(3,4)\}
 \]
+\end{tcolorbox}
 
 \end{columns}
 
 \end{frame}
 
 %--------------------------------
-\section{Edge List}
-
-\setbeamercolor{frametitle}{bg=pastelpink}
-
 \begin{frame}{Danh sách cạnh (Edge List)}
 
-\textbf{Biểu diễn:}
+\begin{columns}
 
+\column{0.5\textwidth}
+
+\begin{tikzpicture}[scale=0.9]
+\node[circle,draw,fill=main1!20,thick] (1) at (0,0) {1};
+\node[circle,draw,fill=main2!20,thick] (2) at (2,1) {2};
+\node[circle,draw,fill=main2!20,thick] (3) at (2,-1) {3};
+\node[circle,draw,fill=main1!20,thick] (4) at (4,0) {4};
+
+\draw[thick] (1)--(2);
+\draw[thick] (1)--(3);
+\draw[thick] (2)--(4);
+\draw[thick] (3)--(4);
+\end{tikzpicture}
+
+\column{0.5\textwidth}
+
+\begin{tcolorbox}
+\textbf{\faProjectDiagram Biểu diễn}
 \[
 (1,2), (1,3), (2,4)
 \]
+\end{tcolorbox}
 
-\textbf{Code:}
-{\scriptsize
-\begin{verbatim}
-vector<pair<int,int>> edges;
+\vspace{0.3cm}
 
-edges.push\_back({1,2});
-edges.push\_back({1,3});
-edges.push\_back({2,4});
-\end{verbatim}
-}
-
-\textbf{Đặc điểm:}
+\begin{tcolorbox}
+\textbf{\faInfoCircle Đặc điểm}
 \begin{itemize}
 \item Dễ lưu, dễ nhập
 \item Không tối ưu khi duyệt
 \end{itemize}
+\end{tcolorbox}
+
+\end{columns}
 
 \end{frame}
 
 %--------------------------------
-\section{Adjacency Matrix}
-
-\setbeamercolor{frametitle}{bg=pastelgreen}
-
 \begin{frame}{Ma trận kề}
 
 \begin{columns}
 
 \column{0.5\textwidth}
 
+\begin{tikzpicture}[scale=0.9]
+\node[circle,draw,fill=main1!20,thick] (1) at (0,0) {1};
+\node[circle,draw,fill=main2!20,thick] (2) at (2,1) {2};
+\node[circle,draw,fill=main2!20,thick] (3) at (2,-1) {3};
+\node[circle,draw,fill=main1!20,thick] (4) at (4,0) {4};
+
+\draw[thick] (1)--(2);
+\draw[thick] (1)--(3);
+\draw[thick] (2)--(4);
+\draw[thick] (3)--(4);
+\end{tikzpicture}
+
+\column{0.5\textwidth}
+
+\begin{tcolorbox}
 \[
 \begin{bmatrix}
 0 & 1 & 1 & 0 \\
@@ -161,123 +180,141 @@ edges.push\_back({2,4});
 0 & 1 & 1 & 0
 \end{bmatrix}
 \]
+\end{tcolorbox}
 
-\column{0.5\textwidth}
+\vspace{0.3cm}
 
-\textbf{Code:}
-\begin{verbatim}
-
-a[1][2] = a[2][1] = 1;
-a[1][3] = a[3][1] = 1;
-a[2][4] = a[4][2] = 1;
-a[3][4] = a[4][3] = 1;
-\end{verbatim}
-
-\end{columns}
-
-\textbf{Đặc điểm:}
+\begin{tcolorbox}
+\textbf{\faInfoCircle Đặc điểm}
 \begin{itemize}
 \item Kiểm tra cạnh nhanh O(1)
 \item Tốn bộ nhớ O($n^2$)
 \end{itemize}
+\end{tcolorbox}
+
+\end{columns}
 
 \end{frame}
 
 %--------------------------------
-\section{Adjacency List}
-
-\setbeamercolor{frametitle}{bg=pastelpurple}
-
 \begin{frame}{Danh sách kề}
 
 \begin{columns}
 
 \column{0.5\textwidth}
 
+\begin{tikzpicture}[scale=0.9]
+\node[circle,draw,fill=main1!20,thick] (1) at (0,0) {1};
+\node[circle,draw,fill=main2!20,thick] (2) at (2,1) {2};
+\node[circle,draw,fill=main2!20,thick] (3) at (2,-1) {3};
+\node[circle,draw,fill=main1!20,thick] (4) at (4,0) {4};
+
+\draw[thick] (1)--(2);
+\draw[thick] (1)--(3);
+\draw[thick] (2)--(4);
+\draw[thick] (3)--(4);
+\end{tikzpicture}
+
+\column{0.5\textwidth}
+
+\begin{tcolorbox}
 \begin{itemize}
 \item 1: 2, 3
 \item 2: 1, 4
 \item 3: 1, 4
 \item 4: 2, 3
 \end{itemize}
+\end{tcolorbox}
 
-\column{0.5\textwidth}
+\vspace{0.3cm}
 
-\textbf{Code:}
-\begin{verbatim}
-vector<int> adj[100];
-
-adj[1] = {2,3};
-adj[2] = {1,4};
-adj[3] = {1,4};
-adj[4] = {2,3};
-\end{verbatim}
-
-\end{columns}
-
-\textbf{Đặc điểm:}
+\begin{tcolorbox}
+\textbf{\faInfoCircle Đặc điểm}
 \begin{itemize}
 \item Tiết kiệm bộ nhớ
 \item Duyệt nhanh
 \end{itemize}
+\end{tcolorbox}
+
+\end{columns}
 
 \end{frame}
 
 %--------------------------------
-\section{So sánh}
-
-\setbeamercolor{frametitle}{bg=pastelyellow}
-
 \begin{frame}{So sánh 3 cách}
 
-\begin{itemize}
-\item \textbf{Edge List:}
+\begin{columns}
+
+\column{0.5\textwidth}
+\begin{tcolorbox}
+\textbf{\faBalanceScale Edge List}
 \begin{itemize}
 \item Lưu đơn giản
 \item Không phù hợp BFS/DFS
 \end{itemize}
+\end{tcolorbox}
 
-\item \textbf{Adjacency Matrix:}
+\vspace{0.2cm}
+
+\begin{tcolorbox}
+\textbf{\faBalanceScale Adjacency Matrix}
 \begin{itemize}
 \item Kiểm tra cạnh nhanh nhất
 \item Chậm khi duyệt toàn bộ
 \end{itemize}
+\end{tcolorbox}
 
-\item \textbf{Adjacency List:}
+\column{0.5\textwidth}
+
+\begin{tcolorbox}
+\textbf{\faBalanceScale Adjacency List}
 \begin{itemize}
 \item Duyệt nhanh nhất
 \item Dùng phổ biến nhất
 \end{itemize}
+\end{tcolorbox}
 
-\end{itemize}
+\end{columns}
 
 \end{frame}
 
 %--------------------------------
-\section{Khi nào dùng}
-
-\setbeamercolor{frametitle}{bg=pastelorange}
-
 \begin{frame}{Khi nào nên dùng?}
 
-\textbf{Edge List:}
+\begin{columns}
+
+\column{0.5\textwidth}
+
+\begin{tcolorbox}
+\textbf{\faLightbulb Edge List}
 \begin{itemize}
 \item Khi chỉ cần lưu cạnh
 \item Bài toán đơn giản
 \end{itemize}
+\end{tcolorbox}
 
-\textbf{Adjacency Matrix:}
+\vspace{0.2cm}
+
+\begin{tcolorbox}
+\textbf{\faLightbulb Adjacency Matrix}
 \begin{itemize}
 \item Đồ thị dày ($m \approx n^2$)
 \item Cần kiểm tra nhanh có cạnh hay không
 \end{itemize}
+\end{tcolorbox}
 
-\textbf{Adjacency List:}
+\column{0.5\textwidth}
+
+\begin{tcolorbox}
+\textbf{\faLightbulb Adjacency List}
 \begin{itemize}
 \item Đồ thị thưa
 \item Dùng BFS, DFS
 \item Thi lập trình
 \end{itemize}
+\end{tcolorbox}
+
+\end{columns}
 
 \end{frame}
 
