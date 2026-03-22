@@ -1,166 +1,198 @@
-\documentclass[10pt, xcolor={dvipsnames}]{beamer}
-
-% --- Cấu hình Tiếng Việt và Giao diện ---
-\usepackage[utf8]{vietnam}
-\usepackage{amsmath, amssymb}
-\usepackage{listings}
-\usepackage{booktabs}
+\documentclass{beamer}
 
 \usetheme{Madrid}
-\usecolortheme{default} % Sử dụng tông trắng chủ đạo
-\setbeamertemplate{items}[square]
-\setbeamertemplate{navigation symbols}{} 
 
-% Tùy chỉnh màu sắc tiêu đề nhẹ nhàng (Xanh Navy)
-\setbeamercolor{structure}{fg=MidnightBlue}
-\setbeamercolor{title}{fg=white, bg=MidnightBlue}
+%================= LANGUAGE =================
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
 
-% --- Cấu hình hiển thị Code (Nền trắng, sạch sẽ) ---
-\lstset{
-    language=C++,
-    backgroundcolor=\color{white},   
-    commentstyle=\color{gray},
-    keywordstyle=\color{blue}\bfseries,
-    numberstyle=\tiny\color{gray},
-    stringstyle=\color{OliveGreen},
-    basicstyle=\ttfamily\tiny,
-    breaklines=true,                 
-    captionpos=b,                    
-    frame=lines, % Chỉ kẻ dòng trên và dưới cho thanh lịch
-    numbers=left,
-    tabsize=2
+%================= PACKAGE =================
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{fontawesome5}
+\usetikzlibrary{arrows.meta}
+
+%================= COLOR =================
+\definecolor{main1}{RGB}{102,126,234}
+\definecolor{main2}{RGB}{118,75,162}
+
+\setbeamercolor{frametitle}{fg=white,bg=main1}
+\setbeamercolor{title}{fg=white,bg=main2}
+
+%================= BACKGROUND =================
+\setbeamertemplate{background canvas}{
+\begin{tikzpicture}[remember picture,overlay]
+\path[left color=main1!20,right color=main2!20]
+(current page.south west) rectangle (current page.north east);
+\end{tikzpicture}
 }
 
-% --- Thông tin bài thuyết trình ---
-\title[Shortest Path]{THUẬT TOÁN ĐƯỜNG ĐI NGẮN NHẤT}
-\subtitle{Phân tích giải thuật Dijkstra \& Floyd-Warshall}
-\author[Phạm Gia Kiệt]{Thuyết trình bởi: \textbf{Phạm Gia Kiệt}}
-\institute[Lớp 11 Tin]{Khối 11 - Chuyên Tin}
+%================= BOX CUSTOM =================
+\tcbset{
+  colback=white,
+  colframe=main1,
+  arc=4mm,
+  boxrule=1pt,
+  drop shadow,
+  fonttitle=\bfseries
+}
+
+%================= INFO =================
+\title{Thuật toán Đường đi ngắn nhất}
+\author{Phạm Gia Kiệt}
 \date{\today}
 
 \begin{document}
 
-% Slide Tiêu đề
+\frame{\titlepage}
+
+%------------------------------------------------
+\section{Dijkstra}
+\begin{frame}{Thuật toán Dijkstra}
+
+\begin{columns}
+
+\column{0.5\textwidth}
+\begin{tcolorbox}[title=\faWalking \ Ý tưởng]
+Tìm đường từ một điểm đến tất cả các điểm còn lại.
+\begin{itemize}
+    \item[\faCheck] Chỉ dùng cho cạnh \textbf{dương}.
+    \item[\faStar] Luôn chọn điểm \textbf{gần nhất} để đi tiếp.
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.2cm}
+
+\begin{tcolorbox}[colframe=main2, title=\faSync \ Quy trình]
+\begin{enumerate}
+    \item Chọn điểm $U$ gần nhất.
+    \item Xem các điểm $V$ quanh nó.
+    \item Nếu đi qua $U$ mà \textbf{ngắn hơn} đường cũ $\to$ Cập nhật.
+\end{enumerate}
+\end{tcolorbox}
+
+\column{0.5\textwidth}
+\begin{center}
+\begin{tikzpicture}[node distance={15mm}, thick, main/.style = {draw, circle, fill=main1!20}] 
+\node[main] (1) {S}; 
+\node[main] (2) [above right of=1] {A}; 
+\node[main] (3) [below right of=1] {B}; 
+\node[main] (4) [right of=2] {C};
+
+\draw (1) -- node[midway, sloped, above] {7} (2); 
+\draw (1) -- node[midway, sloped, below] {2} (3); 
+\draw (3) -- node[midway, sloped, above] {3} (2);
+\draw (2) -- node[midway, sloped, above] {1} (4);
+\end{tikzpicture}
+\end{center}
+
+\begin{tcolorbox}
+\small \faLightbulb \textbf{Ví dụ:} Đi từ S đến A trực tiếp mất 7, nhưng qua B chỉ mất $2+3=5$. Ta chọn đường qua B.
+\end{tcolorbox}
+
+\end{columns}
+\end{frame}
+
+%------------------------------------------------
+\section{Floyd-Warshall}
+\begin{frame}{Thuật toán Floyd-Warshall}
+
+\begin{columns}
+
+\column{0.5\textwidth}
+\begin{tcolorbox}[title=\faMap \ Ý tưởng]
+Tìm mọi con đường ngắn nhất giữa \textbf{mọi cặp điểm}.
+\begin{itemize}
+    \item[\faCheck] Dùng được cho cạnh \textbf{âm}.
+    \item[\faRedo] Thử chèn từng điểm trung gian vào giữa.
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.2cm}
+
+\begin{tcolorbox}[colframe=main2, title=\faQuestion \ So sánh]
+Với mọi cặp điểm (A, B):
+\begin{itemize}
+    \item[\faArrowRight] Cách 1: $A \to B$
+    \item[\faArrowRight] Cách 2: $A \to K \to B$
+\end{itemize}
+\textbf{Cái nào ngắn hơn thì lấy!}
+\end{tcolorbox}
+
+\column{0.5\textwidth}
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+\node[circle,draw,fill=main2!20] (I) at (0,0) {i};
+\node[circle,draw,fill=main2!20] (J) at (3,0) {j};
+\node[circle,draw,fill=main1!40] (K) at (1.5,1.5) {k};
+
+\draw[->, dashed] (I) -- (J) node[midway, below] {Đường thẳng};
+\draw[->, thick, main1] (I) -- (K);
+\draw[->, thick, main1] (K) -- (J);
+\node at (1.5, -0.8) {\small \textit{Thử đi vòng qua K}};
+\end{tikzpicture}
+\end{center}
+
+\begin{tcolorbox}
+\textbf{\faInfoCircle Đặc điểm}
+\begin{itemize}
+    \item Rất dễ cài đặt (3 vòng lặp).
+    \item Chạy chậm hơn Dijkstra trên đồ thị lớn.
+\end{itemize}
+\end{tcolorbox}
+
+\end{columns}
+\end{frame}
+
+%------------------------------------------------
+\section{So sánh}
+\begin{frame}{Nên chọn thuật toán nào?}
+
+\begin{columns}
+
+\column{0.5\textwidth}
+\begin{tcolorbox}[title=\faBolt \ Dùng Dijkstra khi...]
+\begin{itemize}
+    \item[\faMapMarker*] Chỉ cần tìm từ 1 điểm xuất phát.
+    \item[\faHashtag] Đồ thị rất nhiều đỉnh và cạnh (như bản đồ thực).
+    \item[\faBan] Không có đường đi trọng số âm.
+\end{itemize}
+\end{tcolorbox}
+
+\column{0.5\textwidth}
+\begin{tcolorbox}[title=\faLayerGroup \ Dùng Floyd khi...]
+\begin{itemize}
+    \item[\faObjectGroup] Cần biết mọi đường đi giữa mọi cặp.
+    \item[\faExpandArrowsAlt] Đồ thị nhỏ (ít hơn 500 điểm).
+    \item[\faCheckDouble] Có xuất hiện trọng số âm.
+\end{itemize}
+\end{tcolorbox}
+
+\end{columns}
+
+\vspace{0.4cm}
+\begin{tcolorbox}[colframe=main2, center title]
+\centering
+\textbf{\faStar Lời khuyên:} Trong thi lập trình, nếu đề bài nhỏ, hãy dùng Floyd cho khỏe. Nếu đề bài lớn, bắt buộc dùng Dijkstra!
+\end{tcolorbox}
+
+\end{frame}
+
+%------------------------------------------------
 \begin{frame}
-    \titlepage
-\end{frame}
+\centering
+\begin{tcolorbox}[colback=main2!10, colframe=main2, arc=5mm, center]
+\centering
+\Huge \textcolor{main2}{\textbf{CẢM ƠN MỌI NGƯỜI!}}
+\end{tcolorbox}
 
-% Slide 1: Đặt vấn đề
-\begin{frame}{1. Bài toán tìm đường đi ngắn nhất}
-    \begin{itemize}
-        \item \textbf{Khái niệm:} Tìm lộ trình giữa các cặp đỉnh sao cho tổng trọng số (chi phí, khoảng cách) là tối ưu nhất.
-        \item \textbf{Phân loại theo mục tiêu:}
-        \begin{enumerate}
-            \item \textbf{Single-Source:} Dijkstra, Bellman-Ford.
-            \item \textbf{All-Pairs:} Floyd-Warshall.
-        \end{enumerate}
-    \end{itemize}
-    \vspace{0.3cm}
-    \begin{block}{Ứng dụng thực tế}
-        Tìm đường trên bản đồ số, tối ưu hóa băng thông mạng thông tin, bài toán vận chuyển hàng hóa.
-    \end{block}
-\end{frame}
-
-% Slide 2: Dijkstra
-\begin{frame}{2. Thuật toán Dijkstra}
-    \textbf{Đặc điểm:} Thuật toán tham lam (Greedy). Luôn chọn đỉnh có khoảng cách tạm thời nhỏ nhất để tối ưu.
-    
-    \begin{itemize}
-        \item \textbf{Yêu cầu:} Trọng số trên các cạnh \textbf{không được âm}.
-        \item \textbf{Độ phức tạp:} $O(E \log V)$ khi dùng \texttt{priority\_queue}.
-    \end{itemize}
-
-    \begin{exampleblock}{Công thức thư giãn (Relaxation)}
-        Dựa trên bất đẳng thức tam giác:
-        $$d[v] = \min(d[v], d[u] + w(u, v))$$
-    \end{exampleblock}
-\end{frame}
-
-% Slide 3: Code Dijkstra
-\begin{frame}[fragile]{Dijkstra - C++ Implementation}
-\begin{lstlisting}
-typedef pair<int, int> pii;
-const int INF = 1e9 + 7;
-vector<pii> adj[100005];
-int d[100005];
-
-void dijkstra(int s) {
-    fill(d + 1, d + n + 1, INF);
-    priority_queue<pii, vector<pii>, greater<pii>> pq;
-    d[s] = 0; pq.push({0, s});
-
-    while (!pq.empty()) {
-        int u = pq.top().second, du = pq.top().first;
-        pq.pop();
-        if (du > d[u]) continue;
-        for (auto edge : adj[u]) {
-            int v = edge.first, w = edge.second;
-            if (d[v] > d[u] + w) {
-                d[v] = d[u] + w;
-                pq.push({d[v], v});
-            }
-        }
-    }
-}
-\end{lstlisting}
-\end{frame}
-
-% Slide 4: Floyd-Warshall
-\begin{frame}{3. Thuật toán Floyd-Warshall}
-    \textbf{Nguyên lý:} Quy hoạch động (Dynamic Programming). Xét lần lượt từng đỉnh $k \in \{1 \dots N\}$ làm điểm trung gian giữa mọi cặp $(i, j)$.
-    
-    \begin{itemize}
-        \item \textbf{Đặc điểm:} Tìm đường đi ngắn nhất giữa \textbf{mọi cặp đỉnh}.
-        \item \textbf{Độ phức tạp:} $O(V^3)$.
-        \item \textbf{Ưu điểm:} Xử lý được cạnh âm, cài đặt cực kỳ đơn giản.
-    \end{itemize}
-
-    \begin{alertblock}{Công thức chuyển trạng thái}
-        $$dist[i][j] = \min(dist[i][j], dist[i][k] + dist[k][j])$$
-    \end{alertblock}
-\end{frame}
-
-% Slide 5: Code Floyd
-\begin{frame}[fragile]{Floyd-Warshall - Implementation}
-\begin{lstlisting}
-// dist[i][j] khoi tao bang trong so canh
-// dist[i][i] = 0, cac cap ko co canh = INF
-void floyd() {
-    for (int k = 1; k <= n; k++) {
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= n; j++) {
-                if (dist[i][k] < INF && dist[k][j] < INF)
-                    dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
-            }
-        }
-    }
-}
-\end{lstlisting}
-\end{frame}
-
-% Slide 6: So sánh
-\begin{frame}{4. So sánh tổng quát}
-    \centering
-    \begin{table}
-        \begin{tabular}{lcc}
-            \toprule
-            \textbf{Đặc điểm} & \textbf{Dijkstra} & \textbf{Floyd-Warshall} \\
-            \midrule
-            Mô hình & Nguồn đơn (SSSP) & Mọi cặp đỉnh (APSP) \\
-            Trọng số âm & Không hỗ trợ & Có hỗ trợ \\
-            Độ phức tạp & $O(E \log V)$ & $O(V^3)$ \\
-            Cài đặt & Trung bình & Rất dễ \\
-            \bottomrule
-        \end{tabular}
-    \end{table}
-\end{frame}
-
-% Slide Kết thúc
-\begin{frame}
-    \centering
-    \Huge \textcolor{MidnightBlue}{\textbf{CẢM ƠN CÁC BẠN!}} \\
-    \vspace{0.5cm}
-    \large \textbf{Q\&A}
+\vspace{0.5cm}
+\textbf{\faUser \ Người trình bày: Phạm Gia Kiệt} \\
+\vspace{0.2cm}
+\faGamepad \ Chúc các bạn học tốt lý thuyết đồ thị!
 \end{frame}
 
 \end{document}
