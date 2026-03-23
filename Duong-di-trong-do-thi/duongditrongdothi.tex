@@ -1,0 +1,242 @@
+\documentclass{beamer}
+
+\usetheme{Madrid}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{fontawesome5}
+
+\definecolor{main1}{RGB}{102,126,234}
+\definecolor{main2}{RGB}{118,75,162}
+
+\setbeamercolor{frametitle}{fg=white,bg=main1}
+\setbeamercolor{title}{fg=white,bg=main2}
+
+\setbeamertemplate{background canvas}{
+\begin{tikzpicture}[remember picture,overlay]
+\path[left color=main1!20,right color=main2!20]
+(current page.south west) rectangle (current page.north east);
+\end{tikzpicture}
+}
+
+\tcbset{colback=white,colframe=main1,arc=4mm,boxrule=1pt,drop shadow}
+
+\lstset{language=C++,basicstyle=\ttfamily\tiny,keywordstyle=\color{main2},commentstyle=\color{green!50!black},breaklines=true}
+
+\title{Đường đi ngắn nhất trên đồ thị}
+\author{Phạm Gia Kiệt}
+\date{\today}
+
+\begin{document}
+
+\frame{\titlepage}
+
+%================= INTRO =================
+\begin{frame}{Bài toán đường đi ngắn nhất}
+
+\begin{tcolorbox}
+\textbf{\faRoute Khái niệm}
+\begin{itemize}
+\item Tìm đường đi từ đỉnh $u$ đến $v$ sao cho tổng trọng số nhỏ nhất
+\item Có thể có nhiều đường đi khác nhau giữa hai đỉnh
+\item Không phải đường trực tiếp luôn là tối ưu
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.2cm}
+
+\begin{tcolorbox}
+\textbf{\faLightbulb Ví dụ thực tế}
+\begin{itemize}
+\item Google Maps tìm đường đi nhanh nhất
+\item Đi học: chọn đường ít tắc nhất
+\item Mạng máy tính: truyền dữ liệu tối ưu
+\end{itemize}
+\end{tcolorbox}
+
+\end{frame}
+
+%================= TYPE =================
+\begin{frame}{Phân loại bài toán}
+
+\begin{tcolorbox}
+\textbf{\faLayerGroup Các dạng phổ biến}
+\begin{itemize}
+\item Từ 1 đỉnh đến tất cả → Dijkstra
+\item Giữa mọi cặp đỉnh → Floyd
+\item Không trọng số → BFS
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.2cm}
+
+\begin{tcolorbox}
+\textbf{\faCheckCircle Ghi nhớ nhanh}
+\begin{itemize}
+\item Dijkstra dùng nhiều nhất trong thi
+\item Floyd dùng khi $n$ nhỏ
+\item BFS là trường hợp đặc biệt
+\end{itemize}
+\end{tcolorbox}
+
+\end{frame}
+
+%================= DIJKSTRA =================
+\begin{frame}{Dijkstra - Ý tưởng}
+
+\begin{tcolorbox}
+\textbf{\faBolt Nguyên lý}
+\begin{itemize}
+\item Xuất phát từ đỉnh nguồn
+\item Luôn chọn đỉnh có khoảng cách nhỏ nhất
+\item Sau khi chọn thì giá trị đó là tối ưu
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.2cm}
+
+\begin{tcolorbox}
+\textbf{\faExclamationTriangle Lưu ý}
+\begin{itemize}
+\item Không dùng khi có cạnh âm
+\item Nếu có cạnh âm → dùng Bellman-Ford
+\end{itemize}
+\end{tcolorbox}
+
+\end{frame}
+
+\begin{frame}{Dijkstra - Các bước}
+
+\begin{tcolorbox}
+\begin{enumerate}
+\item Khởi tạo $d[s]=0$
+\item Chọn đỉnh có khoảng cách nhỏ nhất
+\item Cập nhật các đỉnh kề
+\item Lặp lại đến khi hết
+\end{enumerate}
+\end{tcolorbox}
+
+\vspace{0.2cm}
+
+\begin{tcolorbox}
+\textbf{\faClock Độ phức tạp}
+\begin{itemize}
+\item $O(E \log V)$
+\item Chạy rất nhanh với đồ thị lớn
+\end{itemize}
+\end{tcolorbox}
+
+\end{frame}
+
+\begin{frame}[fragile]{Code Dijkstra}
+\begin{tcolorbox}
+\begin{lstlisting}
+#define ll long long
+const ll INF=1e18;
+vector<pair<ll,ll>> adj[100005];
+ll d[100005];
+
+void f(ll s){
+    for(ll i=1;i<=n;i++) d[i]=INF;
+    priority_queue<pair<ll,ll>,vector<pair<ll,ll>>,greater<>> q;
+    d[s]=0; q.push({0,s});
+    while(q.size()){
+        auto [du,u]=q.top(); q.pop();
+        if(du!=d[u]) continue;
+        for(auto [v,w]:adj)
+            if(d[v]>du+w)
+            d[v]=du+w,q.push({d[v],v});
+    }
+}
+\end{lstlisting}
+\end{tcolorbox}
+\end{frame}
+
+%================= FLOYD =================
+\begin{frame}{Floyd - Ý tưởng}
+
+\begin{tcolorbox}
+\textbf{\faProjectDiagram Nguyên lý}
+\begin{itemize}
+\item Thử đi qua từng đỉnh trung gian k
+\item Nếu đi qua k ngắn hơn → cập nhật
+\item Áp dụng cho mọi cặp đỉnh
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.2cm}
+
+\begin{tcolorbox}
+\textbf{\faCalculator Công thức}
+[
+d[i][j] = \min(d[i][j], d[i][k] + d[k][j])
+]
+\end{tcolorbox}
+
+\end{frame}
+
+\begin{frame}[fragile]{Code Floyd}
+\begin{tcolorbox}
+\begin{lstlisting}
+const ll INF=1e18;
+ll d[505][505];
+
+for(ll k=1;k<=n;k++)
+    for(ll i=1;i<=n;i++)
+        for(ll j=1;j<=n;j++)
+            d[i][j]=min(d[i][j],d[i][k]+d[k][j]);
+\end{lstlisting}
+\end{tcolorbox}
+
+\vspace{0.2cm}
+
+\begin{tcolorbox}
+\textbf{\faExclamationTriangle Lưu ý}
+\begin{itemize}
+\item Vòng k phải nằm ngoài cùng
+\item Không dùng khi có chu trình âm
+\end{itemize}
+\end{tcolorbox}
+
+\end{frame}
+
+%================= COMPARE =================
+\begin{frame}{So sánh}
+
+\begin{tcolorbox}
+\begin{tabular}{|c|c|c|}
+\hline
+Thuật toán & Độ phức tạp & Dùng cho \
+\hline
+Dijkstra & $O(E\log V)$ & 1 nguồn \
+Floyd & $O(n^3)$ & Mọi cặp \
+\hline
+\end{tabular}
+\end{tcolorbox}
+
+\vspace{0.2cm}
+
+\begin{tcolorbox}
+\textbf{\faLightbulb Kết luận nhanh}
+\begin{itemize}
+\item Dijkstra: nhanh, dùng nhiều nhất
+\item Floyd: đơn giản nhưng chậm
+\item Chọn đúng thuật toán là quan trọng
+\end{itemize}
+\end{tcolorbox}
+
+\end{frame}
+
+\begin{frame}
+\centering
+\Huge{Cảm ơn!}
+\end{frame}
+
+\end{document}
